@@ -24,6 +24,7 @@ class MapController {
                 let result = await pathService.calculateRequestPath(source, dest, deviation, false);
                 return res.status(200).json(result);
             } catch (error) {
+                LOGGER.error("Failed to get path with minimum elevation gain ", error);
                 if (typeof error === "string") {
                     return res.status(400).json({ status: 400, message: error.toUpperCase() });
                 } else if (error instanceof Error) {
@@ -33,6 +34,7 @@ class MapController {
                 }
             }
         } else {
+            LOGGER.error("Request body invalid");
             return res.status(400).json({ status: 400, message: "INVALID_REQUEST" });
         }
     }
@@ -55,6 +57,7 @@ class MapController {
                 let result = pathService.calculateRequestPath(source, dest, deviation, true);
                 return res.status(200).json(result);
             } catch (error) {
+                LOGGER.error("Failed to get path with maximum elevation gain ", error);
                 if (typeof error === "string") {
                     return res.status(400).json({ status: 400, message: error.toUpperCase() });
                 } else if (error instanceof Error) {
@@ -64,6 +67,7 @@ class MapController {
                 }
             }
         } else {
+            LOGGER.error("Request body invalid");
             return res.status(400).json({ status: 400, message: "INVALID_REQUEST" });
         }
     }
