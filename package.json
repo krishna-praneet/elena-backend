@@ -1,0 +1,25 @@
+{
+  "name": "elena-backend-v2",
+  "version": "1.0.0",
+  "description": "Backend apis to support elevation based navigation system",
+  "main": "src/index.js",
+  "scripts": {
+    "clean": "tsc --build --clean",
+    "start": "node src/index.js"
+  },
+  "author": "Om",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "graph-from-osm": "^1.0.0",
+    "haversine": "^1.1.1",
+    "manhattan-distance": "^0.0.3",
+    "ngraph.graph": "^20.0.1",
+    "ngraph.path": "^1.4.0",
+    "node-fetch": "^3.3.0",
+    "winston": "^3.8.2"
+  },
+  "type": "module"
+}
