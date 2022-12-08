@@ -54,7 +54,7 @@ class MapController {
                     lat: endCordinates[0],
                     lng: endCordinates[1],
                 };
-                let result = pathService.calculateRequestPath(source, dest, deviation, true);
+                let result = await pathService.calculateRequestPath(source, dest, deviation, true);
                 return res.status(200).json(result);
             } catch (error) {
                 LOGGER.error("Failed to get path with maximum elevation gain ", error);

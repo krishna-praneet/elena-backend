@@ -5,7 +5,6 @@ import haversine from "haversine";
 let g = null;
 
 export async function generateGraph(settings, graph) {
-    console.log(settings);
     const osmData = await graphFromOsm.getOsmData(settings);
 
     g = graphFromOsm.osmDataToGraph(osmData);

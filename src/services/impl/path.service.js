@@ -4,7 +4,6 @@ import { harversine_heuristic } from "../../utils/heuristic.js";
 import path from "ngraph.path";
 import createGraph from "ngraph.graph";
 import { generateGraph } from "../../model/map.model.js";
-("use strict");
 
 const LOGGER = Logger("path.service.js");
 class PathService {
@@ -32,8 +31,6 @@ class PathService {
 
             let shortestElevationGain = this.calculateElevations(shortestPath, false);
 
-            console.log(shortestElevationGain);
-
             //compute the distance between two nodes, if they are 1000 meters long, we only return the shortest paths to limit the computation power
 
             let s = this.graph.getNode(source);
@@ -52,6 +49,7 @@ class PathService {
             let walkDistance = haversine(start, end, { unit: "meter" });
 
             if (shortestPath.length == 0) {
+                LOGGER.warn("No Shortest path found or shortest path lenght is 0");
                 return null;
             }
 
@@ -110,8 +108,6 @@ class PathService {
                 let elevationGain = elevations[plot];
                 let path = paths[plot];
                 let dist = this.calculateDistance(path, true);
-                console.log("path", path);
-                console.log("dist", dist);
 
                 return {
                     path: path,
@@ -203,13 +199,13 @@ class PathService {
     findAllPaths(source, target, maxLength) {
         //boolean type for checking if node is visisted
         let verticeCount = 0;
-        graph.forEachNode(function () {
+        this.graph.forEachNode(function () {
             verticeCount++;
         });
 
         //fetch sourced node and target node first
-        let s = graph.getNode(source);
-        let t = graph.getNode(target);
+        let s = this.graph.getNode(source);
+        let t = this.graph.getNode(target);
 
         let isVisited = new Array(verticeCount).fill(false);
         //store the path
@@ -220,8 +216,49 @@ class PathService {
         pathList.push(s);
 
         //call util dfs
-        DFSUtils(s, t, isVisited, pathList, final, maxLength);
+        this.DFSUtils(s, t, isVisited, pathList, final, maxLength);
         return final;
+    }
+
+    DFSUtils(source, target, isVisited, pathList, final, maxLength) {
+        //check if two node are equal
+        if (source === target) {
+            final.push([...pathList]);
+            return;
+        }
+
+        //if exceed the maxLength we still not found the target, we return immediately
+        if (source !== target && pathList.length >= maxLength) {
+            return;
+        }
+
+        // mark the current node to be visited
+        isVisited[source.id] = true;
+
+        // get the adjacent list
+        let adjacent = [];
+        //TRUE indicates we only want the outgoing edge
+        graph.forEachLinkedNode(
+            source.id,
+            (linkedNode) => {
+                adjacent.push(linkedNode);
+            },
+            true
+        );
+
+        for (let i = 0; i < adjacent.length; i++) {
+            if (!isVisited[adjacent[i].id]) {
+                //store current node to pathList
+                pathList.push(adjacent[i]);
+                DFSUtils(adjacent[i], target, isVisited, pathList, final, maxLength);
+
+                //backtracking
+                pathList.splice(pathList.indexOf(adjacent[i]), 1);
+            }
+        }
+
+        //mark the current node to unvisited
+        isVisited[source.id] = false;
     }
 
     calculateElevations(path, isForward) {
