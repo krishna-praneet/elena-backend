@@ -3,7 +3,7 @@ import haversine from "haversine";
 import { harversine_heuristic } from "../../utils/heuristic.js";
 import path from "ngraph.path";
 import createGraph from "ngraph.graph";
-import MapModel from "../../model/map.model.js"
+import MapModel from "../../model/map.model.js";
 
 const LOGGER = Logger("path.service.js");
 class PathService {
@@ -116,43 +116,48 @@ class PathService {
                     shortestDistance: shortestDistance,
                 };
             }
-        } catch (err) {
-            LOGGER.error("Failed to calculate the path", err);
+        } catch (error) {
+            LOGGER.error("Failed to calculate the path", error);
             return null;
         }
     }
 
     //Util Functions
     closestNode(source, target) {
-        let sourceMin = Number.MAX_SAFE_INTEGER,
-            targetMin = Number.MAX_SAFE_INTEGER,
-            sourceId = "",
-            targetId = "";
+        try {
+            let sourceMin = Number.MAX_SAFE_INTEGER,
+                targetMin = Number.MAX_SAFE_INTEGER,
+                sourceId = "",
+                targetId = "";
 
-        this.graph.forEachNode((node) => {
-            if (
-                sourceMin >
-                Math.abs(node.data.coordinates[0] - source["lat"]) +
-                    Math.abs(node.data.coordinates[1] - source["lng"])
-            ) {
-                sourceMin =
+            this.graph.forEachNode((node) => {
+                if (
+                    sourceMin >
                     Math.abs(node.data.coordinates[0] - source["lat"]) +
-                    Math.abs(node.data.coordinates[1] - source["lng"]);
-                sourceId = node.id;
-            }
-            if (
-                targetMin >
-                Math.abs(node.data.coordinates[0] - target["lat"]) +
-                    Math.abs(node.data.coordinates[1] - target["lng"])
-            ) {
-                targetMin =
+                        Math.abs(node.data.coordinates[1] - source["lng"])
+                ) {
+                    sourceMin =
+                        Math.abs(node.data.coordinates[0] - source["lat"]) +
+                        Math.abs(node.data.coordinates[1] - source["lng"]);
+                    sourceId = node.id;
+                }
+                if (
+                    targetMin >
                     Math.abs(node.data.coordinates[0] - target["lat"]) +
-                    Math.abs(node.data.coordinates[1] - target["lng"]);
-                targetId = node.id;
-            }
-        });
+                        Math.abs(node.data.coordinates[1] - target["lng"])
+                ) {
+                    targetMin =
+                        Math.abs(node.data.coordinates[0] - target["lat"]) +
+                        Math.abs(node.data.coordinates[1] - target["lng"]);
+                    targetId = node.id;
+                }
+            });
 
-        return { source: sourceId, target: targetId };
+            return { source: sourceId, target: targetId };
+        } catch (error) {
+            LOGGER.error("Failed to find the closest node to the source and target", error);
+            return null;
+        }
     }
 
     findShortestPath(source, target) {
@@ -173,13 +178,13 @@ class PathService {
 
             return shortestPath;
         } catch (error) {
-            LOGGER.error("Failed to find the shortest path");
+            LOGGER.error("Failed to find the shortest path between source and destination", error);
             return null;
         }
     }
 
     calculateDistance(path, isForward) {
-        LOGGER.info("Calculating distance");
+        LOGGER.info("Calculating distance of a path");
         try {
             let totalDistance = 0;
 
@@ -192,32 +197,41 @@ class PathService {
 
             return totalDistance;
         } catch (error) {
-            LOGGER.error("Failed to calculate distance", err);
+            LOGGER.error("Failed to calculate distance", error);
+            return null;
         }
     }
 
     findAllPaths(source, target, maxLength) {
-        //boolean type for checking if node is visisted
-        let verticeCount = 0;
-        this.graph.forEachNode(function () {
-            verticeCount++;
-        });
+        try {
+            //boolean type for checking if node is visisted
+            let verticeCount = 0;
+            this.graph.forEachNode(function () {
+                verticeCount++;
+            });
 
-        //fetch sourced node and target node first
-        let s = this.graph.getNode(source);
-        let t = this.graph.getNode(target);
+            //fetch sourced node and target node first
+            let s = this.graph.getNode(source);
+            let t = this.graph.getNode(target);
 
-        let isVisited = new Array(verticeCount).fill(false);
-        //store the path
-        let pathList = [];
-        let final = [];
+            let isVisited = new Array(verticeCount).fill(false);
+            //store the path
+            let pathList = [];
+            let final = [];
 
-        //add source node to path
-        pathList.push(s);
+            //add source node to path
+            pathList.push(s);
 
-        //call util dfs
-        this.DFSUtils(s, t, isVisited, pathList, final, maxLength);
-        return final;
+            //call util dfs
+            this.DFSUtils(s, t, isVisited, pathList, final, maxLength);
+            return final;
+        } catch (error) {
+            LOGGER.error(
+                "Failed to find all paths that are with x percent of the shortest distance",
+                error
+            );
+            return null;
+        }
     }
 
     DFSUtils(source, target, isVisited, pathList, final, maxLength) {
@@ -262,34 +276,49 @@ class PathService {
     }
 
     calculateElevations(path, isForward) {
-        let elevation = 0;
-        let edges = isForward ? this.pathToEdgeForWard(path) : this.pathToEdgeBackWard(path);
-        edges.forEach((edge) => {
-            if (edge.data.elevation > 0) {
-                elevation += edge.data.elevation;
-            }
-        });
+        try {
+            let elevation = 0;
+            let edges = isForward ? this.pathToEdgeForWard(path) : this.pathToEdgeBackWard(path);
+            edges.forEach((edge) => {
+                if (edge.data.elevation > 0) {
+                    elevation += edge.data.elevation;
+                }
+            });
 
-        return elevation;
+            return elevation;
+        } catch (error) {
+            LOGGER.error("Failed to calculate elevation of a path", error);
+            return null;
+        }
     }
 
     pathToEdgeForWard(path) {
-        let edges = [];
-        for (let i = 1; i < path.length; i++) {
-            let edge = this.graph.getLink(path[i - 1].id, path[i].id);
-            edges.push(edge);
+        try {
+            let edges = [];
+            for (let i = 1; i < path.length; i++) {
+                let edge = this.graph.getLink(path[i - 1].id, path[i].id);
+                edges.push(edge);
+            }
+            return edges;
+        } catch (error) {
+            LOGGER.error("Failed to find the forward edges of a path", error);
+            return null;
         }
-        return edges;
     }
 
     pathToEdgeBackWard(path) {
-        let edges = [];
+        try {
+            let edges = [];
 
-        for (let i = path.length - 1; i > 0; i--) {
-            let edge = this.graph.getLink(path[i].id, path[i - 1].id);
-            edges.push(edge);
+            for (let i = path.length - 1; i > 0; i--) {
+                let edge = this.graph.getLink(path[i].id, path[i - 1].id);
+                edges.push(edge);
+            }
+            return edges;
+        } catch (error) {
+            LOGGER.error("Failed to find the backward edges of a path", error);
+            return null;
         }
-        return edges;
     }
 }
 
