@@ -15,6 +15,16 @@ class PathService {
         await MapModel.generateGraph(settings, this.graph);
     }
 
+    /**
+     *
+     * @param {*} source The {lat, long} coordinates of the source location
+     * @param {*} target The {lat, long} coordinates of the target location
+     * @param {*} percentage The percentage deviation from shortest path
+     * @param {*} isMax boolean parameter to identify if max elevation or min elevation gain is required
+     * @returns the path with maximum or minimum elevation gain. Returns null if no path is
+     * found or if there is an error.
+     *
+     */
     async calculateRequestPath(source, target, percentage, isMax) {
         LOGGER.info(
             `Calculating path from coordinates ${source["lat"]}, ${source["lng"]} to coordinates ${target["lat"]}, ${target["lng"]}`
@@ -122,7 +132,14 @@ class PathService {
         }
     }
 
-    //Util Functions
+    //Utility Functions
+
+    /**
+     *
+     * @param {*} source The {lat, long} coordinates of the source location
+     * @param {*} target The {lat, long} coordinates of the target location
+     * @returns the closest node on map to source and target nodes
+     */
     closestNode(source, target) {
         try {
             let sourceMin = Number.MAX_SAFE_INTEGER,
@@ -160,6 +177,13 @@ class PathService {
         }
     }
 
+    /**
+     *
+     * @param {*} source The {lat, long} coordinates of the source location
+     * @param {*} target The {lat, long} coordinates of the target location
+     * @returns finds and returns the shortest path. returns null if no path if sound or
+     * there is an error
+     */
     findShortestPath(source, target) {
         try {
             LOGGER.info("Finding the shortest path");
@@ -183,6 +207,12 @@ class PathService {
         }
     }
 
+    /**
+     *
+     * @param {*} path the path for which the distance has to be calculated
+     * @param {*} isForward boolean to determine if the path is forward or backward
+     * @returns the total distance of path in meters
+     */
     calculateDistance(path, isForward) {
         LOGGER.info("Calculating distance of a path");
         try {
@@ -202,28 +232,30 @@ class PathService {
         }
     }
 
+    /**
+     *
+     * @param {*} source The {lat, long} coordinates of the source location
+     * @param {*} target The {lat, long} coordinates of the target location
+     * @param {*} maxLength the max length that the path can have
+     * @returns
+     */
     findAllPaths(source, target, maxLength) {
         try {
-            //boolean type for checking if node is visisted
             let verticeCount = 0;
             this.graph.forEachNode(function () {
                 verticeCount++;
             });
 
-            //fetch sourced node and target node first
             let s = this.graph.getNode(source);
             let t = this.graph.getNode(target);
 
             let isVisited = new Array(verticeCount).fill(false);
-            //store the path
             let pathList = [];
             let final = [];
 
-            //add source node to path
             pathList.push(s);
 
-            //call util dfs
-            this.DFSUtils(s, t, isVisited, pathList, final, maxLength);
+            this.DFSUtil(s, t, isVisited, pathList, final, maxLength);
             return final;
         } catch (error) {
             LOGGER.error(
@@ -234,24 +266,29 @@ class PathService {
         }
     }
 
-    DFSUtils(source, target, isVisited, pathList, final, maxLength) {
-        //check if two node are equal
+    /**
+     *
+     * @param {*} source The {lat, long} coordinates of the source location
+     * @param {*} target The {lat, long} coordinates of the target location
+     * @param {*} isVisited array to maintain if a node is visited or not
+     * @param {*} pathList stores the path in the DFS
+     * @param {*} final array to store all the paths
+     * @param {*} maxLength the maximum length that the path can have
+     * @returns
+     */
+    DFSUtil(source, target, isVisited, pathList, final, maxLength) {
         if (source === target) {
             final.push([...pathList]);
             return;
         }
 
-        //if exceed the maxLength we still not found the target, we return immediately
         if (source !== target && pathList.length >= maxLength) {
             return;
         }
 
-        // mark the current node to be visited
         isVisited[source.id] = true;
 
-        // get the adjacent list
         let adjacent = [];
-        //TRUE indicates we only want the outgoing edge
         graph.forEachLinkedNode(
             source.id,
             (linkedNode) => {
@@ -262,19 +299,22 @@ class PathService {
 
         for (let i = 0; i < adjacent.length; i++) {
             if (!isVisited[adjacent[i].id]) {
-                //store current node to pathList
                 pathList.push(adjacent[i]);
                 DFSUtils(adjacent[i], target, isVisited, pathList, final, maxLength);
 
-                //backtracking
                 pathList.splice(pathList.indexOf(adjacent[i]), 1);
             }
         }
 
-        //mark the current node to unvisited
         isVisited[source.id] = false;
     }
 
+    /**
+     *
+     * @param {*} path the path for which elevation gain has to be calculated
+     * @param {*} isForward boolean parameter to identify if the path is a forward or backward path.
+     * @returns the total elevation gained by the path
+     */
     calculateElevations(path, isForward) {
         try {
             let elevation = 0;
@@ -292,6 +332,11 @@ class PathService {
         }
     }
 
+    /**
+     *
+     * @param {*} path the path for which we have to find edges in the forward direction
+     * @returns returns the edges of the path in the forward direction
+     */
     pathToEdgeForWard(path) {
         try {
             let edges = [];
@@ -306,6 +351,11 @@ class PathService {
         }
     }
 
+    /**
+     *
+     * @param {*} path the path for which we have to find edges in the backward direction
+     * @returns returns the edges of the path in the backward direction
+     */
     pathToEdgeBackWard(path) {
         try {
             let edges = [];

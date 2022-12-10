@@ -1,8 +1,8 @@
 // import { APIRespose } from "../models/api-response.model";
 import pathService from "../services/impl/path.service.js";
-import { WALK_settings } from "../utils/constants.js";
+import { MAP_WALK_SETTINGS } from "../utils/constants.js";
 import Logger from "../utils/logger.js";
-pathService.init(WALK_settings);
+pathService.init(MAP_WALK_SETTINGS);
 
 const LOGGER = Logger("index.js");
 class MapController {
