@@ -3,7 +3,7 @@ import haversine from "haversine";
 import { harversine_heuristic } from "../../utils/heuristic.js";
 import path from "ngraph.path";
 import createGraph from "ngraph.graph";
-import { generateGraph } from "../../model/map.model.js";
+import MapModel from "../../model/map.model.js"
 
 const LOGGER = Logger("path.service.js");
 class PathService {
@@ -12,7 +12,7 @@ class PathService {
 
     async init(settings) {
         this.graph = createGraph();
-        await generateGraph(settings, this.graph);
+        await MapModel.generateGraph(settings, this.graph);
     }
 
     async calculateRequestPath(source, target, percentage, isMax) {

@@ -23,3 +23,6 @@ export const WALK_settings = {
     timeout: 1000000000,
     maxContentLength: 2500000000,
 };
+
+export const geometryTypePoint = "Point";
+export const geometryTypeLineString = "LineString";
