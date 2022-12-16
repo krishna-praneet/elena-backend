@@ -6,6 +6,20 @@ pathService.init(MAP_WALK_SETTINGS);
 
 const LOGGER = Logger("index.js");
 class MapController {
+    /**
+     *
+     * @param {*} req {"start":{"coordinates":[]},"end":{"coordinates":[]},"percentage":}
+     * req body containing the start and end coordinates along with the percentage deviation
+     * @param {*} res 
+     * {
+            path: x, // The path with the minimum elevation gain
+            elevationGain: x, // The elevation gained in the path
+            distance: x, // The total length of the path
+            shortestDistance: x, //The shortest path between the start and end coordinates
+        }
+     * @param {*} next
+     * @returns 
+     */
     async getMinElevationPath(req, res, next) {
         let startCoordiantes = req.body["start"]?.coordinates;
         let endCordinates = req.body["end"]?.coordinates;
@@ -39,6 +53,20 @@ class MapController {
         }
     }
 
+    /**
+     *
+     * @param {*} req {"start":{"coordinates":[]},"end":{"coordinates":[]},"percentage":}
+     * req body containing the start and end coordinates along with the percentage deviation
+     * @param {*} res 
+     * {
+            path: x, // The path with the maximum elevation gain
+            elevationGain: x, // The elevation gained in the path
+            distance: x, // The total length of the path
+            shortestDistance: x, //The shortest path between the start and end coordinates
+        }
+     * @param {*} next
+     * @returns 
+     */
     async getMaxElevationPath(req, res, next) {
         let startCoordiantes = req.body["start"]?.coordinates;
         let endCordinates = req.body["end"]?.coordinates;
