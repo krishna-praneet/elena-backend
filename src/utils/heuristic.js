@@ -8,17 +8,17 @@ import manhattan from "manhattan-distance";
  * @returns the haversine distance between the start and end
  */
 export function harversine_heuristic(start, end) {
-    let start = {
+    let startCoords = {
         latitude: start.data.coordinates[0],
         longitude: start.data.coordinates[1],
     };
 
-    let end = {
+    let endCoords = {
         latitude: end.data.coordinates[0],
         longitude: end.data.coordinates[1],
     };
 
-    return haversine(start, end, { unit: "meter" });
+    return haversine(startCoords, endCoords, { unit: "meter" });
 }
 
 /**
