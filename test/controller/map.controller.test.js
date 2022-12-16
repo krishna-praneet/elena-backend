@@ -74,3 +74,4 @@ describe("Test map controller", () => {
         });
     });
 });
+  
