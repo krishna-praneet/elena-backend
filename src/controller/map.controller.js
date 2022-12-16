@@ -1,4 +1,3 @@
-// import { APIRespose } from "../models/api-response.model";
 import pathService from "../services/impl/path.service.js";
 import { MAP_WALK_SETTINGS } from "../utils/constants.js";
 import Logger from "../utils/logger.js";
