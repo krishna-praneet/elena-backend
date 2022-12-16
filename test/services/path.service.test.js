@@ -12,18 +12,7 @@ describe("Test path service preconditions", function () {
 
 describe("Test path service", function () {
     describe("test calculateRequestPath", function () {
-        // before((done) => {
-        //     let start = {
-        //         lat: 42.45808962230291,
-        //         lon: -72.58232659001386,
-        //     };
-        //     let end = {
-        //         lat: 42.350762204006095,
-        //         lon: -72.52745364644278,
-        //     };
-        //     let percent = 0.2;
-        //     done();
-        // });
+        
         it("should calculate the path with minimum elevation gain", async () => {
             console.log("in here");
             let start = {
@@ -37,7 +26,7 @@ describe("Test path service", function () {
             let percent = 0.2;
             let res = await pathService.calculateRequestPath(start, end, percent, false);
             console.log("RES RETURNED");
-            console.log(res);
+            // console.log(res);
             assert(res != null);
             assert(res.path != null);
             expect(res.elevationGain).to.be.equal(77);
@@ -59,5 +48,31 @@ describe("Test path service", function () {
             assert(res.path != null);
             expect(res.elevationGain).to.be.equal(77);
         });
+
+        it("should calculate the path with DFS with closer start and end points", async () => {
+            console.log("in here");
+            
+            let start = {
+                lat: 42.3935967,
+                lng: -72.5261905,
+            };
+            
+            let end = {
+                lat: 42.3907461,
+                lng: -72.5253126,
+            };
+
+            let percent = 0.2;
+            let res = await pathService.calculateRequestPath(start, end, percent, false);
+            
+            console.log("RES RETURNED");
+            
+            assert(res != null);
+            assert(res.path != null);
+
+
+        });
     });
+
+
 });
