@@ -28,3 +28,5 @@ app.listen(port, () => {
     // console.log(`Server Listening on ${port}`);
     LOGGER.info(`Server Listening on ${port}`);
 });
+
+export default app;

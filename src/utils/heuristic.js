@@ -2,19 +2,24 @@ import haversine from "haversine";
 import manhattan from "manhattan-distance";
 // let manhattan = require("manhattan-distance");
 
-//haversine formula heuristic
-export function harversine_heuristic(fromNode, toNode) {
-    let start = {
-        latitude: fromNode.data.coordinates[0],
-        longitude: fromNode.data.coordinates[1],
+/**
+ * Calculates the haversine distance between two points
+ * @param {*} start The coordinates of the start point
+ * @param {*} end The coordinates of the end point
+ * @returns the haversine distance between the start and end
+ */
+export function harversine_heuristic(start, end) {
+    let startNode = {
+        latitude: start.data.coordinates[0],
+        longitude: start.data.coordinates[1],
     };
 
-    let end = {
-        latitude: toNode.data.coordinates[0],
-        longitude: toNode.data.coordinates[1],
+    let endNode = {
+        latitude: end.data.coordinates[0],
+        longitude: end.data.coordinates[1],
     };
 
-    return haversine(start, end, { unit: "meter" });
+    return haversine(startNode, endNode, { unit: "meter" });
 }
 
 //normal distance formula
