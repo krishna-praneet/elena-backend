@@ -6,4 +6,3 @@ error.log
 .nyc_output/
 coverage/
 src/.DS_Store
-package-lock.json
