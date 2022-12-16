@@ -1,4 +1,3 @@
-const fetch = (...args) => import("node-fetch").then(({ default: fetch }) => fetch(...args));
 import graphFromOsm from "graph-from-osm";
 import haversine from "haversine";
 import { MAP_TYPE_LINE_STRING, MAP_TYPE_POINT } from "../utils/constants.js";
@@ -7,7 +6,17 @@ import Logger from "../utils/logger.js";
 let g = null;
 
 const LOGGER = Logger("map.model.js");
+const fetch = (...args) => import("node-fetch").then(({ default: fetch }) => fetch(...args));
+/**
+ * Map Model clas
+ */
 class MapModel {
+
+    /**
+     * Generate graph from given configuration of settings
+     * @param {*} settings Configuration
+     * @param {*} graph Graph of nodes with pathways 
+     */
     async generateGraph(settings, graph) {
         LOGGER.info("Request received to generateGraph");
 
@@ -61,6 +70,11 @@ class MapModel {
         LOGGER.info("Data loaded");
     }
 
+    /**
+     * Function to fetch elevations of the nodes of the graph
+     * @param {*} graph Graph of nodes
+     * @returns Array of elevations for each node in the graph 
+     */
     async getElevations(graph) {
         let answer = {
             results: [],
