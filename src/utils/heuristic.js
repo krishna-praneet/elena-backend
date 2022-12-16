@@ -1,6 +1,5 @@
 import haversine from "haversine";
 import manhattan from "manhattan-distance";
-// let manhattan = require("manhattan-distance");
 
 /**
  * Calculates the haversine distance between two points
@@ -22,27 +21,32 @@ export function harversine_heuristic(start, end) {
     return haversine(startNode, endNode, { unit: "meter" });
 }
 
-//normal distance formula
-//best for any movements
-export function euclideanDistance_hueristic(fromNode, toNode) {
-    let dx = fromNode.data.coordinates[0] - toNode.data.coordinates[1];
-    let dy = fromNode.data.coordinates[0] - toNode.data.coordinates[1];
+/**
+ * Calculates the euclidean distance between two points
+ * @param {*} start The coordinates of the start point
+ * @param {*} end The coordinates of the end point
+ * @returns the euclidean distance between the start and end
+ */
+export function euclideanDistance_hueristic(start, end) {
+    let dx = start.data.coordinates[0] - end.data.coordinates[1];
+    let dy = start.data.coordinates[0] - end.data.coordinates[1];
 
     return Math.sqrt(dx * dx + dy * dy);
 }
 
-//wrosen the result
-//best for grid like where we have perfect grid like coordinates in the map which line among the x,y coordinates
-export function manhattan_heuristic(fromNode, toNode) {
-    //manhattan distance
+/**
+ * Calculates the manhattan distance between two points
+ * @param {*} start The coordinates of the start point
+ * @param {*} end The coordinates of the end point
+ * @returns the manhattan distance between start and end
+ */
+export function manhattan_heuristic(start, end) {
     return (
         manhattan(
-            fromNode.data.coordinates[0],
-            fromNode.data.coordinates[1],
-            toNode.data.coordinates[0],
-            toNode.data.coordinates[1]
+            start.data.coordinates[0],
+            start.data.coordinates[1],
+            end.data.coordinates[0],
+            end.data.coordinates[1]
         ).slice(0, -2) * 1000
     );
 }
-
-// export default { harversine_heuristic, manhattan_heuristic, euclideanDistance_hueristic };

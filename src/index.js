@@ -14,7 +14,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/map", mapRoutes);
+app.use("/api/v1/elena", mapRoutes);
 
 app.get("/", async (req, res) => {
     res.send("Hello World");
