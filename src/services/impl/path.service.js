@@ -16,7 +16,8 @@ class PathService {
     }
 
     /**
-     *
+     * Calculates the path with maximum or minimum elevation gained between two
+     * coordinates that is within @param percentage of the shortest distance.
      * @param {*} source The {lat, long} coordinates of the source location
      * @param {*} target The {lat, long} coordinates of the target location
      * @param {*} percentage The percentage deviation from shortest path
@@ -135,7 +136,7 @@ class PathService {
     //Utility Functions
 
     /**
-     *
+     * Calculates the closest node to source and target nodes
      * @param {*} source The {lat, long} coordinates of the source location
      * @param {*} target The {lat, long} coordinates of the target location
      * @returns the closest node on map to source and target nodes
@@ -178,7 +179,7 @@ class PathService {
     }
 
     /**
-     *
+     * Finds the shortest path between two points
      * @param {*} source The {lat, long} coordinates of the source location
      * @param {*} target The {lat, long} coordinates of the target location
      * @returns finds and returns the shortest path. returns null if no path if sound or
@@ -208,7 +209,7 @@ class PathService {
     }
 
     /**
-     *
+     * Calculates the length of the path
      * @param {*} path the path for which the distance has to be calculated
      * @param {*} isForward boolean to determine if the path is forward or backward
      * @returns the total distance of path in meters
@@ -233,7 +234,7 @@ class PathService {
     }
 
     /**
-     *
+     * Finds all the paths with a given maximum length between two points
      * @param {*} source The {lat, long} coordinates of the source location
      * @param {*} target The {lat, long} coordinates of the target location
      * @param {*} maxLength the max length that the path can have
@@ -310,7 +311,7 @@ class PathService {
     }
 
     /**
-     *
+     * Calculates the elevation gained in a path
      * @param {*} path the path for which elevation gain has to be calculated
      * @param {*} isForward boolean parameter to identify if the path is a forward or backward path.
      * @returns the total elevation gained by the path
