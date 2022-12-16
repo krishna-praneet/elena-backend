@@ -34,7 +34,6 @@ class PathService {
             let closest = this.closestNode(source, target);
             source = closest.source;
             target = closest.target;
-
             //compute the shortest path
             let shortestPath = this.findShortestPath(source, target);
 
@@ -54,13 +53,13 @@ class PathService {
 
             const end = {
                 latitude: e.data.coordinates[0],
-                longitude: s.data.coordinates[1],
+                longitude: e.data.coordinates[1],
             };
 
             let walkDistance = haversine(start, end, { unit: "meter" });
 
             if (shortestPath.length == 0) {
-                LOGGER.warn("No Shortest path found or shortest path lenght is 0");
+                LOGGER.warn("No Shortest path found or shortest path length is 0");
                 return null;
             }
 
@@ -290,7 +289,7 @@ class PathService {
         isVisited[source.id] = true;
 
         let adjacent = [];
-        graph.forEachLinkedNode(
+        this.graph.forEachLinkedNode(
             source.id,
             (linkedNode) => {
                 adjacent.push(linkedNode);
@@ -301,7 +300,7 @@ class PathService {
         for (let i = 0; i < adjacent.length; i++) {
             if (!isVisited[adjacent[i].id]) {
                 pathList.push(adjacent[i]);
-                DFSUtils(adjacent[i], target, isVisited, pathList, final, maxLength);
+                this.DFSUtil(adjacent[i], target, isVisited, pathList, final, maxLength);
 
                 pathList.splice(pathList.indexOf(adjacent[i]), 1);
             }
