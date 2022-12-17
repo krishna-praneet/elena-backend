@@ -2,3 +2,7 @@
 .env
 combined.log
 error.log
+.DS_Store
+.nyc_output/
+coverage/
+src/.DS_Store

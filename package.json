@@ -5,21 +5,35 @@
   "main": "src/index.js",
   "scripts": {
     "clean": "tsc --build --clean",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "test": "c8 mocha --exit --timeout 100000 --all --file ./test/setup.js test/**/*.js",
+    "coverage-text": "nyc --reporter=text mocha --timeout 100000 --file ./test/setup.js test/**/*.js",
+    "coverage-html": "nyc --reporter=html --all mocha --timeout 100000 --file ./test/setup.js test/**/*.js "
   },
   "author": "Om",
   "license": "ISC",
   "dependencies": {
+    "c8": "^7.12.0",
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "graph-from-osm": "^1.0.0",
     "haversine": "^1.1.1",
+    "isparta": "^4.1.1",
+    "istanbul": "^0.4.5",
+    "jest": "^29.3.1",
     "manhattan-distance": "^0.0.3",
     "ngraph.graph": "^20.0.1",
     "ngraph.path": "^1.4.0",
     "node-fetch": "^3.3.0",
+    "nyc": "^15.1.0",
+    "ts-jest": "^29.0.3",
     "winston": "^3.8.2"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "mocha": "^10.2.0"
+  }
 }

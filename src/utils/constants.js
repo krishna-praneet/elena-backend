@@ -17,9 +17,12 @@ const PEDESTRAIN_HIGHWAY = [
     "oppsite_track",
 ];
 
-export const WALK_settings = {
+export const MAP_WALK_SETTINGS = {
     bbox: UMA_BOX,
     highways: PEDESTRAIN_HIGHWAY,
     timeout: 1000000000,
     maxContentLength: 2500000000,
 };
+
+export const MAP_TYPE_POINT = "Point";
+export const MAP_TYPE_LINE_STRING = "LineString";
