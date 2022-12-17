@@ -14,10 +14,23 @@ describe("Test map controller", () => {
             done();
         });
 
-        it("should get error response when request is invalid", (done) => {
+        it("should get error response when max elevation request is invalid", (done) => {
             let reqBody = {};
             chai.request(server)
                 .post("/api/v1/elena/walk/max")
+                .send(reqBody)
+                .end((err, res) => {
+                    res.should.have.status(400);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("message").eql("INVALID_REQUEST");
+                    done();
+                });
+        });
+
+        it("should get error response when min elevation request is invalid", (done) => {
+            let reqBody = {};
+            chai.request(server)
+                .post("/api/v1/elena/walk/min")
                 .send(reqBody)
                 .end((err, res) => {
                     res.should.have.status(400);
@@ -74,4 +87,3 @@ describe("Test map controller", () => {
         });
     });
 });
-  
