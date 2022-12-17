@@ -189,11 +189,11 @@ class PathService {
             LOGGER.info("Finding the shortest path");
             let pathFinder = path.aStar(this.graph, {
                 oriented: true,
-                distance(fromNode, toNode, link) {
+                distance(source, target, link) {
                     return link.data.distance;
                 },
-                heuristic(fromNode, toNode) {
-                    return harversine_heuristic(fromNode, toNode);
+                heuristic(source, target) {
+                    return harversine_heuristic(source, target);
                 },
             });
 
